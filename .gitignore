@@ -1,0 +1,7 @@
+config
+node_modules
+dist
+yarn-error.log
+config.json
+gamesnewsbot.db
+.vscode

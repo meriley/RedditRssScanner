@@ -1,0 +1,15 @@
+{
+  "arrowParens": "avoid",
+  "printWidth": 250,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": ["**/*.yaml"],
+      "rules": {
+        "singleQuote": false
+      }
+    }
+  ]
+}
