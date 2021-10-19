@@ -1,5 +1,5 @@
 import { getEmbeddedContent } from './content'
-import { longSummary, longInvalid, validImageEntry, validThumbnail } from './test/constants'
+import { longSummary, longInvalid, validImageEntry, validThumbnail } from '../test/constants'
 
 describe('getEmbeddedContent', () => {
   it('should parse an entry with a valid image', () => {

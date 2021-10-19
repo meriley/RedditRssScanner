@@ -1,11 +1,11 @@
 import { Database, OPEN_READWRITE } from 'sqlite3'
 
 export type SubredditRow = {
-  id: string
+  id?: string
   subredditId: string
   channelId: string
   active: boolean
-  createdAt: string
+  createdAt?: string
 }
 
 const upsertSubredditSQL = 'INSERT INTO subreddits (id, subreddit_id, channel_id, active) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET subreddit_id=excluded.subreddit_id, channel_id=excluded.channel_id, active=excluded.active'

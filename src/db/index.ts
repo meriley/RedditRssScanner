@@ -1,3 +1,5 @@
 export * from './threads'
 export * from './channel'
 export * from './subscriber'
+export * from './rss_filter'
+export * from './subreddit'

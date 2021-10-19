@@ -18,8 +18,8 @@ export function getEmbeddedContent(message: string): { image: string | undefined
     return { image: image || thumbnail, summary: message.substr(0, 1024) }
   }
 
-  const footer: string = summaryParse[2]
-  const content: string = summaryParse[1]
+  const footer: string = summaryParse[2] || ''
+  const content: string = summaryParse[1] || ''
   const hasImage = image || thumbnail
   const summary = hasImage && summaryParse ? footer : `${content.substr(0, 1024 - `\n${footer}`.length)}\n${footer}`
 

@@ -1,6 +1,6 @@
 import { BaseGuildTextChannel, Client, ThreadChannel, ThreadChannelTypes, ThreadCreateOptions } from 'discord.js'
 import { CronJob } from 'cron'
-import { getActiveChannelSubscribers, addThread, ChannelRow, getNewestThread, ThreadRow, getThreadSubscribers, ThreadSubscriberRow, upsertThreadSubscriber } from '../db'
+import { getActiveChannelSubscribers, addThread, ChannelRow, getNewestThread, ThreadRow, getThreadSubscribers, ThreadSubscriberRow, upsertThreadSubscriber, upsertSubreddit } from '../db'
 
 export async function createThread(paramaters: { channel: BaseGuildTextChannel; threadParams: ThreadCreateOptions<ThreadChannelTypes> }): Promise<string | undefined> {
   if (!paramaters.channel) {
