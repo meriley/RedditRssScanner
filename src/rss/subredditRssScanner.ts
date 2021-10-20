@@ -31,6 +31,7 @@ export class SubredditRssScanner {
       url,
       refresh: 30000,
     })
+    this.feeder.on('error', console.error)
     console.log(`Started watching RSS feed at ${url}`)
 
     this.feeder.on('new-item', (item: any) => {
