@@ -1,8 +1,9 @@
-import { getNewestThread, ThreadRow } from 'db'
 import { BaseGuildTextChannel, Client, MessageEmbed, MessageOptions, MessagePayload, ThreadChannel } from 'discord.js'
+import { Database } from 'sqlite3'
+import { getNewestThread, ThreadRow } from '../db'
 
-export async function sendMessage({ client, channelId, message }: { client: Client; channelId: string; message: MessageEmbed }) {
-  getNewestThread({
+export async function sendMessage({ client, channelId, db, message }: { client: Client; channelId: string; db: Database; message: MessageEmbed }) {
+  getNewestThread(db, {
     channelId,
     callback: async (row: ThreadRow) => {
       const channel: BaseGuildTextChannel = (await client.channels.fetch(channelId)) as BaseGuildTextChannel

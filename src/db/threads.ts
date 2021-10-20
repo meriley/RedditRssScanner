@@ -1,4 +1,4 @@
-import { Database, OPEN_READONLY, OPEN_READWRITE } from 'sqlite3'
+import { Database } from 'sqlite3'
 
 export type ThreadRow = {
   id: string
@@ -9,8 +9,7 @@ export type ThreadRow = {
 const getNewestThreadSQL = 'SELECT id, channel_id, created_at FROM threads WHERE channel_id=? ORDER BY created_at DESC LIMIT 1'
 const addThreadSQL = 'INSERT INTO threads (id, channel_id) VALUES (?, ?)'
 
-export function getNewestThread({ channelId, callback }: { channelId: string; callback: (row: ThreadRow | undefined) => void }) {
-  const db = new Database('db/gamesnewsbot.db', OPEN_READONLY)
+export function getNewestThread(db: Database, { channelId, callback }: { channelId: string; callback: (row: ThreadRow | undefined) => void }) {
   db.get(getNewestThreadSQL, channelId, (err, row) => {
     if (err) {
       throw err
@@ -25,15 +24,12 @@ export function getNewestThread({ channelId, callback }: { channelId: string; ca
         : undefined
     )
   })
-  db.close()
 }
 
-export function addThread({ channelId, id: threadId }: ThreadRow) {
-  const db = new Database('db/gamesnewsbot.db', OPEN_READWRITE)
-  db.run(addThreadSQL, channelId, threadId, (err, _) => {
+export function addThread(db: Database, { channelId, id: threadId }: ThreadRow) {
+  db.run(addThreadSQL, threadId, channelId, (err, _) => {
     if (err) {
       throw err
     }
   })
-  db.close()
 }
