@@ -4,7 +4,7 @@ import { token } from '../config.json'
 import { initCommands } from './commands'
 import { COMMANDS } from './constants'
 import { removeRssFilter, upsertChannelSubscriber, upsertRssFilter, upsertSubreddit } from './db'
-import { addMemberToLatestThread, initializeThreads, initThreadsJob, removeMemberFromLatestThread } from './discord'
+import { addMemberToLatestThread, initializeThreads, removeMemberFromLatestThread } from './discord'
 import { createRssScanner, initRssScanners, SubredditRssScanner } from './rss'
 
 // Create a new client instance
@@ -19,7 +19,7 @@ client.on('ready', () => {
   console.log('Game News Bot Running')
   client.guilds.cache.forEach(guild => initCommands(guild.id))
   db = new Database('db/gamesnewsbot.db', OPEN_READWRITE)
-  initThreadsJob(client, db)
+  initializeThreads(client, db)
   initRssScanners(client, db, (channelId: string, scanner: SubredditRssScanner) => (rssScanners[channelId] = scanner))
 })
 

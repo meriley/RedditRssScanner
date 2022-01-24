@@ -1,4 +1,3 @@
-import { CronJob } from 'cron'
 import { BaseGuildTextChannel, Client, ThreadChannel, ThreadChannelTypes, ThreadCreateOptions } from 'discord.js'
 import { Database } from 'sqlite3'
 import { addThread, ChannelRow, getActiveChannelSubscribers, getNewestThread, getThreadSubscribers, ThreadRow, ThreadSubscriberRow, upsertThreadSubscriber } from '../db'
@@ -90,9 +89,9 @@ export function initializeThreads(client: Client, db: Database): void {
       }
 
       const threadParams: ThreadCreateOptions<ThreadChannelTypes> = {
-        startMessage: 'Test Thread In Progress',
-        reason: 'New Daily News Thread',
-        name: `Daily ${channelRow.subredditId} News`,
+        startMessage: `Creating dedicated news thread for ${channelRow.subredditId}`,
+        reason: 'New News Thread',
+        name: `${channelRow.subredditId} News`,
         autoArchiveDuration: 'MAX',
       }
 
@@ -120,44 +119,4 @@ export function initializeThreads(client: Client, db: Database): void {
   }
   console.log('getting current channels')
   getActiveChannelSubscribers(db, activeChannelsFn)
-}
-
-export function initThreadsJob(client: Client, db: Database) {
-  console.log('initializing threads')
-  initializeThreads(client, db)
-  // Create a thread daily at midnight
-  console.log('starting thread generation job')
-  new CronJob(
-    '0 0 * * *',
-    async function () {
-      // Callback to create a thread based on Database stored channel IDs
-      const createThreadFn = async (channelRow: ChannelRow) => {
-        const channel: BaseGuildTextChannel | null = (await client.channels.fetch(channelRow.id)) as BaseGuildTextChannel | null
-
-        if (!channel) {
-          console.error(`Failed to retrieve channel ${channelRow.id}`)
-          return undefined
-        }
-
-        const threadParams: ThreadCreateOptions<ThreadChannelTypes> = {
-          startMessage: 'Test Thread In Progress',
-          reason: 'New Daily News Thread',
-          name: `Daily ${channelRow.subredditId} News`,
-          autoArchiveDuration: 'MAX',
-        }
-
-        const threadId = await createThread({ db, channel, threadParams })
-        if (!threadId) {
-          console.error('Failed to create thread')
-          return undefined
-        }
-        addThread(db, { id: threadId, channelId: channelRow.id })
-      }
-      // Get all active Channel Subscriptions
-      getActiveChannelSubscribers(db, createThreadFn)
-    },
-    null,
-    true,
-    'America/Phoenix'
-  ).start()
 }
