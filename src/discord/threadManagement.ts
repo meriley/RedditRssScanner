@@ -102,17 +102,6 @@ export function initializeThreads(client: Client, db: Database): void {
           return undefined
         }
         addThread(db, { id: threadId, channelId: channelRow.id })
-      } else {
-        const nowDay = new Date().getDay()
-        const latestThreadDate = new Date(thread.createdAt || '').getDay()
-        if (nowDay != latestThreadDate) {
-          const threadId = await createThread({ db, channel, threadParams })
-          if (!threadId) {
-            console.error('Failed to create thread')
-            return undefined
-          }
-          addThread(db, { id: threadId, channelId: channelRow.id })
-        }
       }
     }
     getNewestThread(db, { channelId: channelRow.id, callback })
